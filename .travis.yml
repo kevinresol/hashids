@@ -14,10 +14,9 @@ haxe:
 matrix:
   allow_failures:
     - haxe: development
-    - os: osx # https://github.com/back2dos/travix/issues/2
     
 install:
-  - haxelib install travix
+  - haxelib git travix https://github.com/kevinresol/travix brew
   - haxelib run travix install
 
 script:

@@ -1,0 +1,14 @@
+{
+    "name": "hashids",
+    "url": "https://github.com/kevinresol/hashids",
+    "license": "MIT",
+    "classPath": "src",
+    "tags": ["cross", "hashids"],
+    "description": "Cross platform implementation of hashids",
+    "releasenote": "Initial commit",
+    "version": "1.0.0",
+    "contributors": ["kevinresol"],
+    "dependencies": {
+        
+    }
+}

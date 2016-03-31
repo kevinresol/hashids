@@ -1,9 +1,18 @@
 # hashids ![travis](https://travis-ci.org/kevinresol/hashids.svg?branch=master)
-Haxe implementation of hashids
+Haxe implementation of hashids (http://hashids.org/)
+
+
+# Install
+
+```
+haxelib install hashids
+```
 
 # Usage
 
 ```haxe
+import hashids.Hashids;
+
 var hashids = new Hashids("this is my salt");
 
 var encoded = hashids.encode(1);

@@ -4,7 +4,7 @@
     "license": "MIT",
     "classPath": "src",
     "tags": ["cross", "hashids"],
-    "description": "Cross platform implementation of hashids",
+    "description": "Haxe implementation of hashids",
     "releasenote": "Initial commit",
     "version": "1.0.0",
     "contributors": ["kevinresol"],

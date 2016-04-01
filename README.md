@@ -2,8 +2,8 @@
 Haxe implementation of hashids (http://hashids.org/)
 
 
-Implementation ported from AS3 (https://github.com/jovanpn/hashids.as)
-Tests ported from JAVA (https://github.com/jiecao-fm/hashids-java)
+- Implementation ported from AS3 (https://github.com/jovanpn/hashids.as)
+- Tests ported from JAVA (https://github.com/jiecao-fm/hashids-java)
 
 **Tested for the following targets:**
 - Neko

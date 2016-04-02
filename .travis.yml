@@ -16,7 +16,7 @@ matrix:
     - haxe: development
     
 install:
-  - haxelib install travix
+  - haxelib git travix https://github.com/kevinresol/travix brew
   - haxelib run travix install
 
 script:

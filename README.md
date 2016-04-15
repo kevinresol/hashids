@@ -1,4 +1,4 @@
-# hashids ![travis](https://travis-ci.org/kevinresol/hashids.svg?branch=master)
+# hashids [![Build Status](https://travis-ci.org/kevinresol/hashids.svg?branch=master)](https://travis-ci.org/kevinresol/hashids)
 Haxe implementation of hashids (http://hashids.org/)
 
 

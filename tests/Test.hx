@@ -4,6 +4,12 @@ import hashids.Hashids;
 import haxe.unit.TestRunner;
 import haxe.unit.TestCase;
 
+#if flash
+import flash.system.System.exit;
+#else
+import Sys.exit;
+#end
+
 class Test extends TestCase
 {
 	static function main()
@@ -11,12 +17,7 @@ class Test extends TestCase
 		var t = new TestRunner();
 		t.add(new Test());
 		
-		if(!t.run())
-			#if sys 
-				Sys.exit(500);
-			#else
-				trace("Error");
-			#end
+		exit(t.run() ? 0 : 500);
 	}
 	
 	function testBasic()

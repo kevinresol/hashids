@@ -48,6 +48,7 @@ class Test extends TestCase
 		var res2 = a.decode(expected);
 		assertEquals(1, res2.length);
 		assertEquals(num_to_hash, res2[0]);
+		assertEquals(num_to_hash, res2); // test the abstract cast
 	}
 
 	function testServeralNumbers()
@@ -57,7 +58,7 @@ class Test extends TestCase
 		var a = new Hashids("this is my salt");
 		
 		var res = a.encode(num_to_hash);
-		assertEquals(res, expected);
+		assertEquals(expected, res);
 		
 		var res2 = a.decode(expected);
 		assertEquals(num_to_hash.length, res2.length);
@@ -76,6 +77,7 @@ class Test extends TestCase
 		
 		var res2 = a.decode(expected);
 		assertEquals(num_to_hash, res2[0]);
+		assertEquals(num_to_hash, res2); // test the abstract cast
 	}
 
 	function testSpecifyingCustomHashLength()
@@ -90,6 +92,7 @@ class Test extends TestCase
 		var res2 = a.decode(expected);
 		assertEquals(1, res2.length);
 		assertEquals(num_to_hash, res2[0]);
+		assertEquals(num_to_hash, res2); // test the abstract cast
 	}
 
 	function testRandomness()
@@ -111,10 +114,10 @@ class Test extends TestCase
 	{
 		var expected = "kRHnurhptKcjIDTWC3sx";
 		var num_to_hash = [1,2,3,4,5,6,7,8,9,10];
-		var  a = new Hashids("this is my salt");
+		var a = new Hashids("this is my salt");
 		
 		var res = a.encode(num_to_hash);
-		assertEquals(res, expected);
+		assertEquals(expected, res);
 		
 		var res2 = a.decode(expected);
 		assertEquals(res2.length, num_to_hash.length);
@@ -125,11 +128,11 @@ class Test extends TestCase
 	function testRandomnessForIncrementing()
 	{
 		var a = new Hashids("this is my salt");
-		assertEquals(a.encode(1), "NV");
-		assertEquals(a.encode(2), "6m");
-		assertEquals(a.encode(3), "yD");
-		assertEquals(a.encode(4), "2l");
-		assertEquals(a.encode(5), "rD");
+		assertEquals("NV", a.encode(1));
+		assertEquals("6m", a.encode(2));
+		assertEquals("yD", a.encode(3));
+		assertEquals("2l", a.encode(4));
+		assertEquals("rD", a.encode(5));
 	}
 
 	function testAlphabetWithoutO0()
@@ -142,7 +145,8 @@ class Test extends TestCase
 		assertEquals(expected, res);
 		
 		var res2 = a.decode(expected);
-		assertEquals(res2[0], num_to_hash);
+		assertEquals(num_to_hash, res2[0]);
+		assertEquals(num_to_hash, res2); // test the abstract cast
 	}
 }
 

@@ -96,19 +96,8 @@ class Hashids
 	 * @param numbers Numbers to encode
 	 * @return Encoded string
 	 */
-	public function encode(?number:Int, ?numbers:Array<Int>):String
+	public function encode(numbers:IntCollection):String
 	{
-		if(number == null && numbers == null) throw "Please provide a number or an array of numbers";
-		
-		if(numbers == null) numbers = [];
-		if(number != null) numbers.unshift(number);
-		
-		// for (number in numbers)
-		// {
-		// 	if (number > Math.MAX_VALUE)
-		// 		throw "Number can not be greater than " + Number.MAX_VALUE;
-		// }
-		
 		if(numbers.length == 0)
 			return "";
 		
@@ -121,7 +110,7 @@ class Hashids
 	 * @param hash Encoded string
 	 * @return Decoded numbers
 	 */
-	public function decode(hash:String):Array<Int>
+	public function decode(hash:String):IntCollection
 	{
 		if(hash == "")
 			return [];
@@ -288,4 +277,13 @@ class Hashids
 		return number;
 	}
 
+}
+
+@:forward
+abstract IntCollection(Array<Int>) from Array<Int> to Array<Int> {
+	@:from
+	public static inline function fromInt(v:Int):IntCollection return [v];
+	
+	@:to
+	public inline function toInt():Int return this[0];
 }

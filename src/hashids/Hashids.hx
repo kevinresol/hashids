@@ -2,8 +2,7 @@ package hashids;
 
 using StringTools;
 
-class Hashids
-{
+class Hashids {
 	static inline var DEFAULT_ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 	static inline var MIN_ALPHABET_LENGTH = 16;
 	static inline var SEP_DEV = 3.5;
@@ -14,14 +13,12 @@ class Hashids
 	var minHashLength:Int = 0;
 	var guards:String;
 	
-	public function new(salt:String = "", minHashLength:Int = 0, alphabet:String = DEFAULT_ALPHABET)
-	{
+	public function new(salt:String = "", minHashLength:Int = 0, alphabet:String = DEFAULT_ALPHABET) {
 		this.salt = salt;
 		this.minHashLength = minHashLength < 0 ? 0 : minHashLength;
 		
 		var uniqueAlphabet = "";
-		for(i in 0...alphabet.length)
-		{
+		for(i in 0...alphabet.length) {
 			var c = alphabet.charAt(i);
 			if(uniqueAlphabet.indexOf(c) < 0)
 				uniqueAlphabet += c;
@@ -38,8 +35,7 @@ class Hashids
 		
 		// seps should contain only characters present in alphabet;
 		// alphabet should not contains seps
-		for(i in 0...seps.length)
-		{
+		for(i in 0...seps.length) {
 			var j = alphabet.indexOf(seps.charAt(i));
 			if(j == -1)
 				seps = seps.substring(0, i) + " " + seps.substring(i + 1);
@@ -54,20 +50,17 @@ class Hashids
 		
 		
 		
-		if(seps == "" || alphabet.length / seps.length > SEP_DEV)
-		{
+		if(seps == "" || alphabet.length / seps.length > SEP_DEV) {
 			var seps_len = Math.ceil(alphabet.length / SEP_DEV);
 			
 			if(seps_len == 1)
 				seps_len++;
 			
-			if(seps_len > seps.length)
-			{
+			if(seps_len > seps.length) {
 				var diff = seps_len - seps.length;
 				seps += alphabet.substring(0, diff);
 				alphabet = alphabet.substring(diff);
-			}
-			else
+			} else
 				seps = seps.substring(0, seps_len);
 		}
 		
@@ -76,13 +69,10 @@ class Hashids
 		var guardDiv = 12;
 		var guardCount = Math.ceil(alphabet.length / guardDiv);
 		
-		if(alphabet.length < 3)
-		{
+		if(alphabet.length < 3) {
 			guards = seps.substring(0, guardCount);
 			seps = seps.substring(guardCount);
-		}
-		else
-		{
+		} else {
 			guards = alphabet.substring(0, guardCount);
 			alphabet = alphabet.substring(guardCount);
 		}
@@ -96,12 +86,8 @@ class Hashids
 	 * @param numbers Numbers to encode
 	 * @return Encoded string
 	 */
-	public function encode(numbers:IntCollection):String
-	{
-		if(numbers.length == 0)
-			return "";
-		
-		return _encode(numbers);
+	public function encode(numbers:IntCollection):String {
+		return numbers.length == 0 ? "" : _encode(numbers);
 	}
 	
 	/**
@@ -110,16 +96,11 @@ class Hashids
 	 * @param hash Encoded string
 	 * @return Decoded numbers
 	 */
-	public function decode(hash:String):IntCollection
-	{
-		if(hash == "")
-			return [];
-		
-		return _decode(hash, alphabet);
+	public function decode(hash:String):IntCollection {
+		return hash == "" ? [] : _decode(hash, alphabet);
 	}
 
-	function _encode(numbers:Array<Int>):String
-	{
+	function _encode(numbers:Array<Int>):String {
 		var numberHashInt = 0;
 		for(i in 0...numbers.length)
 			numberHashInt += (numbers[i] % (i+100));
@@ -133,8 +114,7 @@ class Hashids
 		var ret_str = ret + "";
 		var guard;
 		
-		for(i in 0...numbers.length)
-		{
+		for(i in 0...numbers.length) {
 			num = numbers[i];
 			buffer = ret + salt + alphabet;
 			
@@ -143,23 +123,20 @@ class Hashids
 			
 			ret_str += last;
 			
-			if(i+1 < numbers.length)
-			{
+			if(i+1 < numbers.length) {
 				num %= (last.charCodeAt(0) + i);
 				sepsIndex = num % seps.length;
 				ret_str += seps.split("")[sepsIndex];
 			}
 		}
 		
-		if(ret_str.length < minHashLength)
-		{
+		if(ret_str.length < minHashLength) {
 			guardIndex = (numberHashInt + ret_str.charCodeAt(0)) % guards.length;
 			guard = guards.split("")[guardIndex];
 			
 			ret_str = guard + ret_str;
 			
-			if(ret_str.length < minHashLength)
-			{
+			if(ret_str.length < minHashLength) {
 				guardIndex = (numberHashInt + ret_str.charCodeAt(2)) % guards.length;
 				guard = guards.split("")[guardIndex];
 				
@@ -167,15 +144,13 @@ class Hashids
 			}
 		}
 		
-		while(ret_str.length < minHashLength)
-		{
+		while(ret_str.length < minHashLength) {
 			var halfLen = Std.int(alphabet.length / 2);
 			alphabet = consistentShuffle(alphabet, alphabet);
 			ret_str = alphabet.substring(halfLen) + ret_str + alphabet.substring(0, halfLen);
 			
 			var excess = ret_str.length - minHashLength;
-			if(excess > 0)
-			{
+			if(excess > 0) {
 				var start_pos = Std.int(excess / 2);
 				ret_str = ret_str.substring(start_pos, start_pos + minHashLength);
 			}
@@ -184,8 +159,7 @@ class Hashids
 		return ret_str;
 	}
 	
-	function _decode(hash:String, alphabet:String):Array<Int>
-	{
+	function _decode(hash:String, alphabet:String):Array<Int> {
 		var ret = [];
 		
 		var i = 0;
@@ -206,8 +180,7 @@ class Hashids
 		
 		var subHash;
 		var buffer;
-		for (aHashArray in hashArray)
-		{
+		for (aHashArray in hashArray) {
 			subHash = aHashArray;
 			buffer = lottery + salt + alphabet;
 			alphabet = consistentShuffle(alphabet, buffer.substring(0, alphabet.length));
@@ -220,8 +193,7 @@ class Hashids
 		return ret;
 	}
 	
-	function consistentShuffle(alphabet:String, salt:String):String
-	{
+	function consistentShuffle(alphabet:String, salt:String):String {
 		if(salt.length <= 0)
 			return alphabet;
 		
@@ -229,8 +201,7 @@ class Hashids
 		var i = alphabet.length - 1;
 		var v = 0;
 		var p = 0;
-		while(i > 0)
-		{
+		while(i > 0) {
 			v %= salt.length;
 			var asc_val = arr[v].charCodeAt(0);
 			p += asc_val;
@@ -247,29 +218,24 @@ class Hashids
 		return alphabet;
 	}
 	
-	function hash(input:Int, alphabet:String):String
-	{
+	function hash(input:Int, alphabet:String):String {
 		var hash = "";
 		var alphabetLen = alphabet.length;
 		var arr = alphabet.split("");
 		
-		do
-		{
+		do {
 			hash = arr[input % alphabetLen] + hash;
 			input = Math.floor(input / alphabetLen);
-		}
-		while(input > 0);
+		} while(input > 0);
 		
 		return hash;
 	}
 	
-	function unhash(input:String, alphabet:String):Int
-	{
+	function unhash(input:String, alphabet:String):Int {
 		var number = 0;
 		var input_arr = input.split("");
 		
-		for(i in 0...input.length)
-		{
+		for(i in 0...input.length) {
 			var pos = alphabet.indexOf(input_arr[i]);
 			number += Std.int(pos * Math.pow(alphabet.length, input.length - i - 1));
 		}

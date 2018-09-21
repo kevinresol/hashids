@@ -145,13 +145,13 @@ class Hashids {
 		}
 		
 		while(ret_str.length < minHashLength) {
-			var halfLen = Std.int(alphabet.length / 2);
+			var halfLen = alphabet.length >> 1;
 			alphabet = consistentShuffle(alphabet, alphabet);
 			ret_str = alphabet.substring(halfLen) + ret_str + alphabet.substring(0, halfLen);
 			
 			var excess = ret_str.length - minHashLength;
 			if(excess > 0) {
-				var start_pos = Std.int(excess / 2);
+				var start_pos = excess >> 1;
 				ret_str = ret_str.substring(start_pos, start_pos + minHashLength);
 			}
 		}

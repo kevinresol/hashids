@@ -3,21 +3,21 @@ package hashids;
 using StringTools;
 
 class Hashids {
-	static inline var DEFAULT_ALPHABET = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+	static inline var DEFAULT_ALPHABET = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
 	static inline var MIN_ALPHABET_LENGTH = 16;
 	static inline var SEP_DEV = 3.5;
 	
-	var salt:String = "";
-	var alphabet:String = "";
-	var seps:String = "cfhistuCFHISTU";
+	var salt:String = '';
+	var alphabet:String = '';
+	var seps:String = 'cfhistuCFHISTU';
 	var minHashLength:Int = 0;
 	var guards:String;
 	
-	public function new(salt:String = "", minHashLength:Int = 0, alphabet:String = DEFAULT_ALPHABET) {
+	public function new(salt:String = '', minHashLength:Int = 0, alphabet:String = DEFAULT_ALPHABET) {
 		this.salt = salt;
 		this.minHashLength = minHashLength < 0 ? 0 : minHashLength;
 		
-		var uniqueAlphabet = "";
+		var uniqueAlphabet = '';
 		for(i in 0...alphabet.length) {
 			var c = alphabet.charAt(i);
 			if(uniqueAlphabet.indexOf(c) < 0)
@@ -30,27 +30,27 @@ class Hashids {
 		if(alphabet.length < MIN_ALPHABET_LENGTH)
 			throw 'Alphabet must contain at least $MIN_ALPHABET_LENGTH unique characters.';
 		
-		if(alphabet.indexOf(" ") >= 0)
-			throw "Alphabet cannot contains spaces.";
+		if(alphabet.indexOf(' ') >= 0)
+			throw 'Alphabet cannot contains spaces.';
 		
 		// seps should contain only characters present in alphabet;
 		// alphabet should not contains seps
 		for(i in 0...seps.length) {
 			var j = alphabet.indexOf(seps.charAt(i));
 			if(j == -1)
-				seps = seps.substring(0, i) + " " + seps.substring(i + 1);
+				seps = seps.substring(0, i) + ' ' + seps.substring(i + 1);
 			else
-				alphabet = alphabet.substring(0, j) + " " + alphabet.substring(j + 1);
+				alphabet = alphabet.substring(0, j) + ' ' + alphabet.substring(j + 1);
 		}
 		
 		var whiteSpacesReg = ~/\s+/g;
-		alphabet = whiteSpacesReg.replace(alphabet, "");
-		seps = whiteSpacesReg.replace(seps, "");
+		alphabet = whiteSpacesReg.replace(alphabet, '');
+		seps = whiteSpacesReg.replace(seps, '');
 		seps = consistentShuffle(seps, salt);
 		
 		
 		
-		if(seps == "" || alphabet.length / seps.length > SEP_DEV) {
+		if(seps == '' || alphabet.length / seps.length > SEP_DEV) {
 			var seps_len = Math.ceil(alphabet.length / SEP_DEV);
 			
 			if(seps_len == 1)
@@ -87,7 +87,7 @@ class Hashids {
 	 * @return Encoded string
 	 */
 	public function encode(numbers:IntCollection):String {
-		return numbers.length == 0 ? "" : _encode(numbers);
+		return numbers.length == 0 ? '' : _encode(numbers);
 	}
 	
 	/**
@@ -97,7 +97,7 @@ class Hashids {
 	 * @return Decoded numbers
 	 */
 	public function decode(hash:String):IntCollection {
-		return hash == "" ? [] : _decode(hash, alphabet);
+		return hash == '' ? [] : _decode(hash, alphabet);
 	}
 
 	function _encode(numbers:Array<Int>):String {
@@ -106,12 +106,12 @@ class Hashids {
 			numberHashInt += (numbers[i] % (i+100));
 		
 		var alphabet = this.alphabet;
-		var ret = alphabet.split("")[numberHashInt % alphabet.length];
+		var ret = alphabet.split('')[numberHashInt % alphabet.length];
 		var num;
 		var sepsIndex;
 		var guardIndex;
 		var buffer;
-		var ret_str = ret + "";
+		var ret_str = ret + '';
 		var guard;
 		
 		for(i in 0...numbers.length) {
@@ -126,19 +126,19 @@ class Hashids {
 			if(i+1 < numbers.length) {
 				num %= (last.charCodeAt(0) + i);
 				sepsIndex = num % seps.length;
-				ret_str += seps.split("")[sepsIndex];
+				ret_str += seps.split('')[sepsIndex];
 			}
 		}
 		
 		if(ret_str.length < minHashLength) {
 			guardIndex = (numberHashInt + ret_str.charCodeAt(0)) % guards.length;
-			guard = guards.split("")[guardIndex];
+			guard = guards.split('')[guardIndex];
 			
 			ret_str = guard + ret_str;
 			
 			if(ret_str.length < minHashLength) {
 				guardIndex = (numberHashInt + ret_str.charCodeAt(2)) % guards.length;
-				guard = guards.split("")[guardIndex];
+				guard = guards.split('')[guardIndex];
 				
 				ret_str += guard;
 			}
@@ -163,20 +163,20 @@ class Hashids {
 		var ret = [];
 		
 		var i = 0;
-		var regexp = new EReg('[$guards]', "g");
-		var hashBreakdown = regexp.replace(hash, " ");
-		var hashArray = hashBreakdown.split(" ");
+		var regexp = new EReg('[$guards]', 'g');
+		var hashBreakdown = regexp.replace(hash, ' ');
+		var hashArray = hashBreakdown.split(' ');
 		
 		if(hashArray.length == 3 || hashArray.length == 2)
 			i = 1;
 		
 		hashBreakdown = hashArray[i];
 		
-		var lottery = hashBreakdown.split("")[0];
+		var lottery = hashBreakdown.split('')[0];
 		
 		hashBreakdown = hashBreakdown.substring(1);
-		hashBreakdown = new EReg('[$seps]', "g").replace(hashBreakdown, " ");
-		hashArray = hashBreakdown.split(" ");
+		hashBreakdown = new EReg('[$seps]', 'g').replace(hashBreakdown, ' ');
+		hashArray = hashBreakdown.split(' ');
 		
 		var subHash;
 		var buffer;
@@ -197,7 +197,7 @@ class Hashids {
 		if(salt.length <= 0)
 			return alphabet;
 		
-		var arr = salt.split("");
+		var arr = salt.split('');
 		var i = alphabet.length - 1;
 		var v = 0;
 		var p = 0;
@@ -219,9 +219,9 @@ class Hashids {
 	}
 	
 	function hash(input:Int, alphabet:String):String {
-		var hash = "";
+		var hash = '';
 		var alphabetLen = alphabet.length;
-		var arr = alphabet.split("");
+		var arr = alphabet.split('');
 		
 		do {
 			hash = arr[input % alphabetLen] + hash;
@@ -233,7 +233,7 @@ class Hashids {
 	
 	function unhash(input:String, alphabet:String):Int {
 		var number = 0;
-		var input_arr = input.split("");
+		var input_arr = input.split('');
 		
 		for(i in 0...input.length) {
 			var pos = alphabet.indexOf(input_arr[i]);

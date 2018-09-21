@@ -26,7 +26,6 @@ class Hashids {
 		
 		alphabet = uniqueAlphabet;
 		
-		var minAlphabetLength = 16;
 		if(alphabet.length < MIN_ALPHABET_LENGTH)
 			throw 'Alphabet must contain at least $MIN_ALPHABET_LENGTH unique characters.';
 		
@@ -47,8 +46,6 @@ class Hashids {
 		alphabet = whiteSpacesReg.replace(alphabet, '');
 		seps = whiteSpacesReg.replace(seps, '');
 		seps = consistentShuffle(seps, salt);
-		
-		
 		
 		if(seps == '' || alphabet.length / seps.length > SEP_DEV) {
 			var seps_len = Math.ceil(alphabet.length / SEP_DEV);

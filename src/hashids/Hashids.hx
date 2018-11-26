@@ -84,7 +84,14 @@ class Hashids {
 	 * @return Encoded string
 	 */
 	public function encode(numbers:IntCollection):String {
-		return numbers.length == 0 ? '' : _encode(numbers);
+        if (numbers.length == 0) return '';
+
+        for (i in 0...numbers.length) {
+            if (numbers[i] < 0) return '';
+
+        }
+
+        return _encode(numbers);
 	}
 	
 	/**
